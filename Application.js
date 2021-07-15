@@ -24,8 +24,6 @@ class Application {
         // Initialize API
         await this._initApi();
 
-        console.log(this._api);
-
         // Initialize Express Routes
         await this._initExpress();
 
@@ -155,7 +153,7 @@ class Application {
                 res.json(await apiInstance.callProcess());
             } catch(e) {
                 if (e instanceof ErrorApiMethod) {
-                    console.error(`[Packer Daemon] ${e.message}`);
+                    console.error(`[HTTP-Server] ${e.message}`);
                     
                     res.status(e.status);
                     res.end(JSON.stringify({
@@ -164,7 +162,7 @@ class Application {
                     }));
                 } else {
                     // Обработка INTERNAL_SERVER_ERROR (500)
-                    console.error(`[Packer Daemon] Request API [${apiName}] failed.\n${e.stack}`);
+                    console.error(`[HTTP-Server] Request API [${apiName}] failed.\n${e.stack}`);
 
                     res.status(500);
                     res.end(JSON.stringify({
