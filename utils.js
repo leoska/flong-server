@@ -1,3 +1,5 @@
+import ErrorApiMethod from './ErrorApiMethod';
+
 /**
  * Функция обработкик таймаута для API-методов
  * 

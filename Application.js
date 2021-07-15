@@ -24,6 +24,8 @@ class Application {
         // Initialize API
         await this._initApi();
 
+        console.log(this._api);
+
         // Initialize Express Routes
         await this._initExpress();
 
@@ -103,7 +105,7 @@ class Application {
                             const subDirs = pathDir.split('/');
                             const apiName = (pathDir.length ? subDirs.join('.') + '.' : '') + file.substr(0, file.length - 3);
                             
-                            const apiModule = require(filePath);
+                            const apiModule = require(filePath).default;
                             
                             if (apiModule.isApi && apiModule.isApi())
                                 this._api[apiName] = apiModule;
@@ -153,7 +155,7 @@ class Application {
                 res.json(await apiInstance.callProcess());
             } catch(e) {
                 if (e instanceof ErrorApiMethod) {
-                    log.error(`[Packer Daemon] ${e.message}`);
+                    console.error(`[Packer Daemon] ${e.message}`);
                     
                     res.status(e.status);
                     res.end(JSON.stringify({
@@ -162,7 +164,7 @@ class Application {
                     }));
                 } else {
                     // Обработка INTERNAL_SERVER_ERROR (500)
-                    log.error(`[Packer Daemon] Request API [${apiName}] failed.\n${e.stack}`);
+                    console.error(`[Packer Daemon] Request API [${apiName}] failed.\n${e.stack}`);
 
                     res.status(500);
                     res.end(JSON.stringify({

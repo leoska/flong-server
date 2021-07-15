@@ -1,5 +1,7 @@
 import { timeout } from './utils';
 
+const API_TIMEOUT = 20000;
+
 export default class BaseApi {
     /**
      * Статическая функция на то, что класс является API-методом
