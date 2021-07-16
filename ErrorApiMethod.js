@@ -1,12 +1,14 @@
 export default class ErrorApiMethod extends Error {
     constructor(message, code, status, stack = false) {
-        super(message);
+        super('');
         this.code = code;
         this.status = status;
-        this._canViewStack = stack;
+        this.message = message;
+        
+        if (stack)
+            Error.captureStackTrace(this, this.constructor);
+        else 
+            this.stack = null;
     }
-    
-    getStack() {
-        return this._canViewStack ? this.stack : null;
-    }
+
 }

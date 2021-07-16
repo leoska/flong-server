@@ -126,12 +126,12 @@ class Application {
      * @returns {void}
      */
     _initExpress() {
-        // Обработка POST-запросов классами API
+        // Обработка POST/GET запросов классами API
         const responseHandler = async (req, res, method) => {
             // req.headers["x-forwarded-for"] <-- этот заголовок обычно вкладывается NGINX'ом
             const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
             const apiName = req.params.apiName;
-            const reqBody = req.body;
+            const reqBody = Object.assign({}, req.query, req.body);
 
             try {
                 // Обработка SERVER_TERMINATING (503)
