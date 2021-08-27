@@ -1,4 +1,4 @@
-import { timeout } from './utils';
+import { timeout } from '../utils';
 
 const API_TIMEOUT = 20000;
 
@@ -13,9 +13,11 @@ export default class BaseApi {
     }
 
     /**
+     * Базовый конструктор класса
      * 
      * @public
      * @constructor
+     * @this BaseApi
      */
     constructor() {
         this.params = {};
@@ -47,6 +49,11 @@ export default class BaseApi {
     
     /**
      * Метод вызова обработки API-метода
+     * 
+     * @async
+     * @public
+     * @this BaseApi
+     * @returns {Promise<Object>}
      */
     async callProcess() {
         try {

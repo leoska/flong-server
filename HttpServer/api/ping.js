@@ -1,8 +1,14 @@
 import BaseApi       from '../BaseApi';
-import { method }    from '../utils';
+import { method }    from '../../utils';
 
 @method("GET")
 export default class Ping extends BaseApi {
+    /**
+     * Базовый конструктор класса
+     * 
+     * @constructor
+     * @this Ping
+     */
     constructor() {
         super();
     }
