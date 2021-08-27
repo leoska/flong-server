@@ -23,7 +23,7 @@ export default class HttpServer {
     }
 
     /**
-     * 
+     * Инициализация Http-Server'а
      * 
      * @async
      * @public

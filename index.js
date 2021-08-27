@@ -1,4 +1,7 @@
 import app from "./Application";
+import { timeout } from "utils";
+
+const EXIT_MAX_WAIT = 10000;
 
 try {
     (async () => {
@@ -12,9 +15,11 @@ try {
 process.on('SIGINT', async () => {
     try {
         await Promise.race([
-            app.stop()
+            app.stop(),
+            timeout(EXIT_MAX_WAIT),
         ]);
     } catch(e) {
-
+        console.error(`Application can't stop correct: ${e}`);
+        process.exit(1);
     }
 });

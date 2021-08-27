@@ -2,6 +2,7 @@ import HttpServer from "./HttpServer";
 
 class Application {
     _httpServer = null;
+    _terminating = false;
 
     /**
      * Статический геттер на единственный экземпляр данного класса (сингл-тон)
@@ -23,6 +24,7 @@ class Application {
      */
     constructor() {
         this._httpServer         = new HttpServer();
+        this._terminating        = false;
     }
 
     /**
@@ -47,7 +49,7 @@ class Application {
      * @returns {Promise<void>}
      */
     async stop() {
-
+        this._terminating = true;
     }
 }
 
