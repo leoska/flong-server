@@ -3,7 +3,7 @@ import ErrorApiMethod from './ErrorApiMethod';
 /**
  * Функция обработкик таймаута для API-методов
  * 
- * @param ms
+ * @param {Number} ms
  * @returns {Promise<Error>}
  */
 export function timeout(ms) {
@@ -15,7 +15,7 @@ export function timeout(ms) {
 /**
  * Функция декоратор для определения правильного метода
  * 
- * @param name
+ * @param {String} name
  * @returns {(function(*, *, *): void)|*}
  */
 export function method(name) {
@@ -24,7 +24,7 @@ export function method(name) {
             constructor(method) {
                 // Обработка Method Not Allowed (405)
                 if (method !== name)
-                    throw new ErrorApiMethod(`Incorrect HTTP-method!`, "Method Not Allowed", 405);
+                    throw new ErrorApiMethod(`Incorrect HTTP-method! Api-method [${target.name}] has a [${name}] method. Try to call another [${method}] method.`, "Method Not Allowed", 405);
                 super();
             }
         }

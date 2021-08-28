@@ -10,5 +10,4 @@ export default class ErrorApiMethod extends Error {
         else 
             this.stack = null;
     }
-
 }

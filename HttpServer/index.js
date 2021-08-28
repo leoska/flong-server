@@ -3,6 +3,7 @@ import fsExtra               from 'fs-extra';
 import path                  from 'path';
 import http                  from 'http';
 import ErrorApiMethod        from '../ErrorApiMethod';
+import colors                from 'colors';
 
 const DEFAULT_HTTP_HOST = "0.0.0.0";
 const DEFAULT_HTTP_PORT = 25565;
@@ -47,7 +48,18 @@ export default class HttpServer {
 
         // Listen http-server
         this.server.listen(options, () => {
-            console.info("[Application] Successfully initialized and started API http-server.");
+            console.info(colors.blue("[HTTP-Server] Successfully initialized and started API http-server."));
+        });
+    }
+
+    /**
+     * Остановка сервера
+     * 
+     * 
+     */
+    async stop() {
+        this.server.close(() => {
+            console.info(colors.blue("[HTTP-Server] Successfully stoped."));
         });
     }
 
@@ -115,8 +127,10 @@ export default class HttpServer {
                             
                             const apiModule = require(filePath).default;
                             
-                            if (apiModule.isApi && apiModule.isApi())
+                            if (apiModule.isApi && apiModule.isApi()) {
+                                console.log(`[HTTP-Server] API ${apiModule.name} successfully initialized.`);
                                 this._api[apiName] = apiModule;
+                            }
                         }
                     }
                     
@@ -172,7 +186,7 @@ export default class HttpServer {
                     }));
                 } else {
                     // Обработка INTERNAL_SERVER_ERROR (500)
-                    console.error(`[HTTP-Server] Request API [${apiName}] failed.\n${e.stack}`);
+                    console.error(colors.red(`[HTTP-Server] Request API [${apiName}] failed.\n${e.stack}`));
 
                     res.status(500);
                     res.end(JSON.stringify({

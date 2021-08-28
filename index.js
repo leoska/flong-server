@@ -1,6 +1,7 @@
 import app from "./Application";
-import { timeout } from "utils";
+import { timeout } from "./utils";
 
+// Время ожидания остановки процееса (в миллисекундах)
 const EXIT_MAX_WAIT = 10000;
 
 try {
@@ -12,6 +13,7 @@ try {
     process.exit(1);
 }
 
+
 process.on('SIGINT', async () => {
     try {
         await Promise.race([
@@ -22,4 +24,6 @@ process.on('SIGINT', async () => {
         console.error(`Application can't stop correct: ${e}`);
         process.exit(1);
     }
+
+    process.exit(0);
 });
