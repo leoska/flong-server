@@ -8,6 +8,7 @@ import colors                from 'colors';
 const DEFAULT_HTTP_HOST = "0.0.0.0";
 const DEFAULT_HTTP_PORT = 25565;
 
+// Базовый класс Http сервера, который поднимается в Application
 export default class HttpServer {
     _server = null;
     _app = null;

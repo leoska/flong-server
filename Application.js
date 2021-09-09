@@ -1,6 +1,8 @@
 import HttpServer from "./HttpServer";
 import WebSocketServer from "./WebSocketServer";
 
+const DEFAULT_CONFIG_ENV = 'develop';
+
 class Application {
     _httpServer = null;
     _wsServer = null;
@@ -46,6 +48,8 @@ class Application {
 
         // Initialize WebSocket-Server
         await this._wsServer.init();
+
+
     }
 
     /**

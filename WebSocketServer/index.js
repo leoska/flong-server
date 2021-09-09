@@ -3,6 +3,7 @@ import colors from "colors";
 
 const DEFAULT_WS_PORT = 25569;
 
+// Базовый класс WebSocket сервера, который поднимается в Application
 export default class WebSocketServer {
     _wsServer = null;
 
@@ -29,14 +30,16 @@ export default class WebSocketServer {
             port: DEFAULT_WS_PORT,
         }
 
-        this._wsServer = new ws.Server(options);
+        this._wsServer = new ws.Server(options, () => {
+            console.info(colors.blue("[WebSocket-Server] Successfully initialized and started WebSocketServer."));
+        });
 
         this._wsServer.on('connection', (webSocket, req) => {
             // IP адрес клиента
             const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
             console.log(colors.green(`[WebSocket-Server] Connection from [${ip}] to url: [${req.url}]`));
-            
+
             webSocket.send(`Connected success!`);
         });
     }
