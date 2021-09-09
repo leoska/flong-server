@@ -3,6 +3,8 @@ import { timeout } from '../utils';
 const API_TIMEOUT = 20000;
 
 export default class BaseApi {
+    _params = {};
+
     /**
      * Статическая функция на то, что класс является API-методом
      * 
@@ -20,7 +22,7 @@ export default class BaseApi {
      * @this BaseApi
      */
     constructor() {
-        this.params = {};
+        this._params = {};
     }
     
     /**
@@ -32,7 +34,7 @@ export default class BaseApi {
      * @returns {void}
      */
     setParams(params) {
-        this.params = params;
+        this._params = params;
     }
     
     /**
@@ -58,7 +60,7 @@ export default class BaseApi {
     async callProcess() {
         try {
             return {
-                response: await Promise.race([timeout(API_TIMEOUT), this.process(this.params || {})])
+                response: await Promise.race([timeout(API_TIMEOUT), this.process(this._params || {})])
             };
         } catch(e) {
             return {

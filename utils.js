@@ -4,11 +4,12 @@ import ErrorApiMethod from './ErrorApiMethod';
  * Функция обработкик таймаута для API-методов
  * 
  * @param {Number} ms
+ * @param {Boolean} [safe]
  * @returns {Promise<Error>}
  */
-export function timeout(ms) {
+export function timeout(ms, safe = false) {
     return new Promise((resolve, reject) => {
-        setTimeout(() => reject(new Error('Timeout reached')), ms);
+        setTimeout(() => safe ? resolve() : reject(new Error('Timeout reached')), ms);
     });
 }
 
@@ -26,6 +27,11 @@ export function method(name) {
                 if (method !== name)
                     throw new ErrorApiMethod(`Incorrect HTTP-method! Api-method [${target.name}] has a [${name}] method. Try to call another [${method}] method.`, "Method Not Allowed", 405);
                 super();
+            }
+
+            // Переопределяем имя класса
+            static get name() {
+                return super.name;
             }
         }
     }

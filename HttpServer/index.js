@@ -4,6 +4,7 @@ import path                  from 'path';
 import http                  from 'http';
 import ErrorApiMethod        from '../ErrorApiMethod';
 import colors                from 'colors';
+import Application           from '../Application';
 
 const DEFAULT_HTTP_HOST = "0.0.0.0";
 const DEFAULT_HTTP_PORT = 25565;
@@ -56,7 +57,10 @@ export default class HttpServer {
     /**
      * Остановка сервера
      * 
-     * 
+     * @async
+     * @public
+     * @this HttpServer
+     * @returns {Promise<void>}
      */
     async stop() {
         this.server.close(() => {
@@ -70,6 +74,7 @@ export default class HttpServer {
      * @async
      * @private
      * @this Application
+     * @returns {Promise<void>}
      */
     async _initApi() {
         /**
@@ -129,7 +134,7 @@ export default class HttpServer {
                             const apiModule = require(filePath).default;
                             
                             if (apiModule.isApi && apiModule.isApi()) {
-                                console.log(`[HTTP-Server] API ${apiModule.name} successfully initialized.`);
+                                console.log(colors.green(`[HTTP-Server] API ${apiModule.name} successfully initialized.`));
                                 this._api[apiName] = apiModule;
                             }
                         }
@@ -160,7 +165,7 @@ export default class HttpServer {
 
             try {
                 // Обработка SERVER_TERMINATING (503)
-                if (this.terminating) {
+                if (Application.terminating) {
                     throw new ErrorApiMethod(`Failed to call API [${apiName}]. code: SERVER_TERMINATING`, "SERVER_TERMINATING", 503);
                 }
                 
@@ -178,7 +183,7 @@ export default class HttpServer {
                 res.json(await apiInstance.callProcess());
             } catch(e) {
                 if (e instanceof ErrorApiMethod) {
-                    console.error(`[HTTP-Server] ${e.message}`);
+                    console.error(colors.red(`[HTTP-Server] ${e.message}`));
                     
                     res.status(e.status);
                     res.end(JSON.stringify({

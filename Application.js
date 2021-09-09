@@ -23,6 +23,18 @@ class Application {
     }
 
     /**
+     * Геттер на переменную остановки сервера
+     * 
+     * @public
+     * @getter
+     * @this Application
+     * @returns {Boolean}
+     */
+    get terminating() {
+        return this._terminating;
+    }
+
+    /**
      * Базовый конструктор класса
      * 
      * @constructor
