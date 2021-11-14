@@ -14,7 +14,7 @@ export function timeout(ms, safe = false) {
 }
 
 /**
- * Функция декоратор для определения правильного метода
+ * Функция декоратор для определения правильного API метода
  * 
  * @param {String} name
  * @returns {(function(*, *, *): void)|*}

@@ -3,7 +3,7 @@ import { timeout } from "./utils";
 import colors from 'colors';
 
 // Время ожидания остановки процееса (в миллисекундах)
-const EXIT_MAX_WAIT = 10000;
+const EXIT_MAX_WAIT = 10000; // 10 secs
 
 try {
     (async () => {
