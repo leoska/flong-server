@@ -7,6 +7,7 @@ const DEFAULT_WS_PORT = 25569;
 // Базовый класс WebSocket сервера, который поднимается в Application
 export default class WebSocketServer {
     _wsServer = null;
+    _webSockets = [];
 
     /**
      * Базовый конструктор класса
@@ -47,7 +48,7 @@ export default class WebSocketServer {
 
             const socket = new WebSocketClient(webSocket);
 
-
+            _webSockets.push(socket);
 
 
 

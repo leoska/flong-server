@@ -23,13 +23,12 @@ export default class WebSocketClient {
      * @returns {WebSocketClient}
      */
     constructor(webSocket) {
-        webSocket.on("error", thid[_onError].bind(this));
+        webSocket.on("error", this[_onError].bind(this));
         webSocket.on('message', this[_onMessage].bind(this));
         webSocket.once('close', this[_onClose].bind(this));
         webSocket.once('open', this[_onClose].bind(this));
 
         this._webSocket = webSocket;
-        this._isClose = false;
     }
 
     /**
@@ -78,6 +77,7 @@ export default class WebSocketClient {
      * @returns {Promise<void>}
      */
     [_onClose](code, reason) {
+        console.info(colors.green(`[WebSocketClient] Connection is established`));
         this._isClose = true;
     }
 
