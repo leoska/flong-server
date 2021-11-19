@@ -1,0 +1,11 @@
+version: '3.1'
+
+services:
+  mariadb:
+    image: mariadb:10.7
+    volumes:
+      - /etc/localtime:/etc/localtime
+    environment:
+      mysql.system.host: mariadb
+      mysql.system.user: root
+      mysql.system.pass: 'D6yeCWD'

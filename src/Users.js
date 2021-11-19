@@ -1,9 +1,14 @@
+import User from "./User";
+
 const METHODS = [
     'set',
     'get',
     'has',
 ];
 
+/**
+ * Сигнлтоновский класс, список юзеров на сервере
+ */
 class Users {
     /**
      * Базовый конструктор
@@ -41,6 +46,18 @@ class Users {
      */
     get size() {
         return this._data.size;
+    }
+
+    /**
+     * Инициализируем юзера
+     * 
+     * @public
+     * @this Users
+     * @returns {Object}
+     */
+    init() {
+        const user = new User();
+        const sid = user.generateSessionId();
     }
 }
 
