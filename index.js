@@ -1,5 +1,5 @@
-import app from "./Application";
-import { timeout } from "./utils";
+import app from "./src/Application";
+import { timeout } from "./src/utils";
 import colors from 'colors';
 
 // Время ожидания остановки процееса (в миллисекундах)
