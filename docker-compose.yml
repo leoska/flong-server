@@ -1,0 +1,9 @@
+version: '3.1'
+
+services:
+  flong_server:
+    image: flong_server
+    restart: always
+    logging:
+      options:
+        max-size: 50m
