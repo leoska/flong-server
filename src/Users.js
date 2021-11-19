@@ -44,9 +44,13 @@ class Users {
     }
 }
 
+// Импортируем необходимые методы для работы с Map
 for (const name of METHODS) {
     Users.prototype[name] = function(...args) {
         return this._data[name](...args);
     }
 }
 
+const users = new Users();
+
+export default users;

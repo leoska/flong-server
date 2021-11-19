@@ -39,6 +39,7 @@ class Application {
      * 
      * @constructor
      * @this Application
+     * @returns {Application}
      */
     constructor() {
         this._httpServer         = new HttpServer();
