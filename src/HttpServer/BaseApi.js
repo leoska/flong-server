@@ -8,10 +8,21 @@ export default class BaseApi {
     /**
      * Статическая функция на то, что класс является API-методом
      * 
-     * @return {boolean}
+     * @return {Boolean}
      */
     static isApi() {
         return true;
+    }
+
+    /**
+     * Аутентификация (инициализация) юзера
+     * 
+     * @static
+     * @public
+     * @returns {Boolean}
+     */
+    static authUser() {
+        return false;
     }
 
     /**

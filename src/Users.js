@@ -59,6 +59,23 @@ class Users {
         const user = new User();
         const sid = user.generateSessionId();
     }
+
+    /**
+     * Сохранение всех юзеров
+     * 
+     * @async
+     * @public
+     * @this Users
+     * @returns {Promise<void>}
+     */
+    async saveAll() {
+        const tasks = [];
+
+        for (const user of this._data)
+            tasks.push(user.save());
+
+        await Promise.all(tasks);
+    }
 }
 
 // Импортируем необходимые методы для работы с Map
