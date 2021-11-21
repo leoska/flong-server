@@ -18,6 +18,7 @@ export default class Init extends BaseApi {
      * Метод для поднятия юзера в памяти
      *
      * @override
+     * @param {String} 
      * @this Ping
      * @returns {Promise<boolean>}
      */

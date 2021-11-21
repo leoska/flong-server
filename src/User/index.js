@@ -10,7 +10,11 @@ export default class User {
     _id = 0; // Идентификатор игрока
 
     /**
+     * Базовый конструктор
      * 
+     * @constructor
+     * @this User
+     * @returns {User}
      */
     constructor() {
 
@@ -31,6 +35,14 @@ export default class User {
         return this._sessionId;
     }
 
+    /**
+     * Сохранение юзера в базе данных
+     * 
+     * @async
+     * @public
+     * @this User
+     * @returns {Promise<void>}
+     */
     async save() {
 
     }

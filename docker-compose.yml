@@ -4,6 +4,8 @@ services:
   flong_server:
     image: flong_server
     restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime
     logging:
       options:
         max-size: 50m

@@ -1,11 +1,17 @@
 version: '3.1'
 
+volumes:
+  mariadb:
+    driver: local
+  
 services:
   mariadb:
     image: mariadb:10.7
     volumes:
       - /etc/localtime:/etc/localtime
+      - ./mariadb/initdb.d:/docker-entrypoint-initdb.d
+      - ./mariadb/data:/var/lib/mysql
     environment:
-      mysql.system.host: mariadb
-      mysql.system.user: root
-      mysql.system.pass: 'D6yeCWD'
+      MYSQL_ROOT_PASSWORD: D6yeCWD
+    ports:
+      - "3306:3306"
