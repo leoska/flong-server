@@ -161,6 +161,7 @@ export default class HttpServer {
             // req.headers["x-forwarded-for"] <-- этот заголовок обычно вкладывается NGINX'ом
             const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
             const apiName = req.params.apiName;
+            // Склеиваем и body и query параметры
             const reqBody = Object.assign({}, req.query, req.body);
 
             try {
@@ -209,7 +210,7 @@ export default class HttpServer {
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
             next();
         });
-        
+
         this._app.post("/api/:apiName", (req, res) => responseHandler(req, res, 'POST'));
         this._app.get("/api/:apiName", (req, res) => responseHandler(req, res, 'GET'));
     }

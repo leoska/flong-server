@@ -15,17 +15,6 @@ export default class BaseApi {
     }
 
     /**
-     * Аутентификация (инициализация) юзера
-     * 
-     * @static
-     * @public
-     * @returns {Boolean}
-     */
-    static authUser() {
-        return false;
-    }
-
-    /**
      * Базовый конструктор класса
      * 
      * @public

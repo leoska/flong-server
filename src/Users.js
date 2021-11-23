@@ -56,8 +56,16 @@ class Users {
      * @returns {Object}
      */
     init() {
-        const user = new User();
-        const sid = user.generateSessionId();
+        try {
+            // Сначала пытаемся узнать, поднят ли текущий юзер в памяти
+            this.get()
+            const user = new User();
+            const sid = user.generateSessionId();
+
+
+        } catch(e) {
+
+        }
     }
 
     /**
@@ -75,6 +83,34 @@ class Users {
             tasks.push(user.save());
 
         await Promise.all(tasks);
+    }
+
+    /**
+     * Получение игрока по фильтру. Метод возвращает первое вхождение по фильтру
+     * 
+     * @public
+     * @param {Object} filter
+     * @this Users
+     * @returns {User|null}
+     */
+    getBy(filter) {
+        // Перечисляем каждого игрока в памяти
+        for (const item of this) {
+            let flag = true; // Предполагаем, что item подходит
+
+            // Проверяем все параметры фильтра
+            for (const [key, value] of Object.entries(filter)) {
+                if (typeof(item[key]) !== typeof(value) || item[key] !== value) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (flag)
+                return item;
+        }
+
+        return null;
     }
 }
 

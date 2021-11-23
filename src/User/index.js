@@ -10,6 +10,18 @@ export default class User {
     _id = 0; // Идентификатор игрока
 
     /**
+     * Получение идентификатора игрока
+     * 
+     * @getter
+     * @public
+     * @this User
+     * @returns {Number}
+     */
+    get id() {
+        return this._id;
+    }
+
+    /**
      * Базовый конструктор
      * 
      * @constructor
@@ -44,6 +56,6 @@ export default class User {
      * @returns {Promise<void>}
      */
     async save() {
-
+        
     }
 }
