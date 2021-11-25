@@ -3,10 +3,14 @@ import crypto from "crypto";
 // Размер идентификатора сессии
 const sessionBytesLength = 16;
 
+// Размер токена идентификации игрока
+const tokenBytesLength = 24;
+
 export default class User {
     _wsSocket = null; // Вебсокет
     _httpSocket = null; // HTTP-сокет
     _sessionId = ""; // Идентификатор сессии
+    _token = null; // Токен авторизации юзера
     _id = 0; // Идентификатор игрока
 
     /**
@@ -19,6 +23,18 @@ export default class User {
      */
     get id() {
         return this._id;
+    }
+
+    /**
+     * Получение токена игрока
+     * 
+     * @getter
+     * @public
+     * @this User
+     * @returns {Buffer|String|null}
+     */
+    get token() {
+        return this._token;
     }
 
     /**
@@ -45,6 +61,10 @@ export default class User {
 
         this._sessionId = crypto.randomBytes(sessionBytesLength).toString('base64');
         return this._sessionId;
+    }
+
+    generateToken() {
+        this._token = crypto.randomBytes(tokenBytesLength).toString('hex');
     }
 
     /**

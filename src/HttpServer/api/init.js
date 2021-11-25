@@ -18,14 +18,14 @@ export default class Init extends BaseApi {
      * Метод для поднятия юзера в памяти
      *
      * @override
-     * @param {String} cookie - в формате base64
+     * @param {String} token - в формате base64
      * @this Ping
      * @returns {Promise<boolean>}
      */
-    async process({cookie}) {
-        const data = Buffer.from(cookie, "utf-8");
+    async process({token}) {
+        const data = Buffer.from(cookie, "hex");
         
-
+        
         const userId = "test";
         users.set(userId, {user: 123});
         const sid = users.init();

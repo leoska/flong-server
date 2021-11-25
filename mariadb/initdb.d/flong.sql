@@ -10,6 +10,7 @@ FLUSH PRIVILEGES;
 CREATE TABLE `flong`.`user`(
     id INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL,
+    token binary(24) NOT NULL,
     stamp_create TIMESTAMP NOT NULL DEFAULT(current_timestamp),
     last_online TIMESTAMP NOT NULL DEFAULT(current_timestamp),
     active ENUM('y', '') NOT NULL,
