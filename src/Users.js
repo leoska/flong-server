@@ -58,6 +58,7 @@ class Users {
     init() {
         try {
             // Сначала пытаемся узнать, поднят ли текущий юзер в памяти
+
             this.get()
             const user = new User();
             const sid = user.generateSessionId();
@@ -98,6 +99,7 @@ class Users {
         for (const item of this) {
             let flag = true; // Предполагаем, что item подходит
 
+            // TODO: можно проверять вложенные объекты с проверкой рекурсии
             // Проверяем все параметры фильтра
             for (const [key, value] of Object.entries(filter)) {
                 if (typeof(item[key]) !== typeof(value) || item[key] !== value) {

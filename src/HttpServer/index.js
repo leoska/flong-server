@@ -163,6 +163,7 @@ export default class HttpServer {
             const apiName = req.params.apiName;
             // Склеиваем и body и query параметры
             const reqBody = Object.assign({}, req.query, req.body);
+            const reqHeaders = Object.assign({}, req.headers);
 
             try {
                 // Обработка SERVER_TERMINATING (503)
@@ -178,7 +179,8 @@ export default class HttpServer {
                 }
                 
                 const apiInstance = new api(method);
-                apiInstance.setParams(reqBody);
+                apiInstance.params = reqBody;
+                apiInstance.headers = reqHeaders;
 
                 // 200 - OK
                 res.json(await apiInstance.callProcess());

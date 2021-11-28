@@ -1,4 +1,6 @@
 import ErrorApiMethod from './ErrorApiMethod';
+import User from './User';
+import Users from './Users';
 
 /**
  * Функция обработкик таймаута для API-методов
@@ -14,7 +16,7 @@ export function timeout(ms, safe = false) {
 }
 
 /**
- * Функция декоратор для определения правильного API метода
+ * Декоратор для определения правильного API метода
  * 
  * @param {String} name
  * @returns {(function(*, *, *): void)|*}
@@ -36,3 +38,32 @@ export function method(name) {
         }
     }
 }
+
+/**
+ * Декоратор для логирования
+ */
+export function log() {
+
+}
+
+/**
+ * Декоратор для предоставления доступа в апи к юзеру (кто дёрнул апи)
+ * 
+ * @param {*} target 
+ * @returns 
+ */
+export function authUser(target) {
+    target.prototype = {
+        __proto__: target.prototype,
+        ...target.prototype,
+        get user() {
+            return new Promise(async (resolve, reject) => {
+                resolve(await Users.get());
+            });
+        }
+    }
+
+    return target;
+}
+
+

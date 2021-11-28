@@ -1,9 +1,11 @@
 import { timeout } from '../utils';
+import colors from 'colors';
 
 const API_TIMEOUT = 20000;
 
 export default class BaseApi {
-    _params = {};
+    _params = null;
+    _headers = null;
 
     /**
      * Статическая функция на то, что класс является API-методом
@@ -15,6 +17,30 @@ export default class BaseApi {
     }
 
     /**
+     * Сеттер для параметров
+     * 
+     * @setter
+     * @public
+     * @param {Object} params
+     * @this BaseApi
+     */
+    set params(params) {
+        this._params = params;
+    }
+
+    /**
+     * Сеттер для заголовков
+     * 
+     * @setter
+     * @public
+     * @param {Object} headers
+     * @this BaseApi
+     */
+    set headers(headers) {
+        this._headers = headers;
+    }
+
+    /**
      * Базовый конструктор класса
      * 
      * @public
@@ -22,19 +48,8 @@ export default class BaseApi {
      * @this BaseApi
      */
     constructor() {
-        this._params = {};
-    }
-    
-    /**
-     * Установка объекта params
-     * 
-     * @public
-     * @param {Object} params
-     * @this BaseApi
-     * @returns {void}
-     */
-    setParams(params) {
-        this._params = params;
+        this._params = null;
+        this._headers = null;
     }
     
     /**
@@ -63,6 +78,8 @@ export default class BaseApi {
                 response: await Promise.race([timeout(API_TIMEOUT), this.process(this._params || {})])
             };
         } catch(e) {
+            console.error(colors.red(e.stack));
+
             return {
                 error: e.toString()
             };

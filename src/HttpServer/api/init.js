@@ -1,8 +1,9 @@
 import BaseApi       from '../BaseApi';
-import { method }    from '../../utils';
+import { authUser, method }    from '../../utils';
 import users         from '../../Users';
 
 @method("GET")
+@authUser
 export default class Init extends BaseApi {
     /**
      * Базовый конструктор класса
@@ -18,14 +19,15 @@ export default class Init extends BaseApi {
      * Метод для поднятия юзера в памяти
      *
      * @override
-     * @param {String} token - в формате base64
+     * @param {String} version - 
      * @this Ping
      * @returns {Promise<boolean>}
      */
-    async process({token}) {
-        const data = Buffer.from(cookie, "hex");
+    async process({version}) {
+        // const data = Buffer.from(cookie, "hex");
         
-        
+        console.log(this._headers);
+
         const userId = "test";
         users.set(userId, {user: 123});
         const sid = users.init();
