@@ -1,5 +1,6 @@
 import BaseApi       from '../BaseApi';
 import { method }    from '../../utils';
+import ErrorApiMethod from '../../ErrorApiMethod';
 
 @method("GET")
 export default class Ping extends BaseApi {
@@ -14,7 +15,7 @@ export default class Ping extends BaseApi {
     }
 
     /**
-     * Дебаговый API-метод для проверки работы сервиса
+     * Дебаговый API-метод для проверки работы сервера
      *
      * @override
      * @this Ping

@@ -1,40 +1,54 @@
 import BaseApi       from '../BaseApi';
-import { authUser, method }    from '../../utils';
-import users         from '../../Users';
+import { method }    from '../../utils';
+import ErrorApiMethod from '../../ErrorApiMethod';
+
+// Поддерживаемые платформы
+const PLATFORMS = [
+    'html5',
+];
+
+// Поддерживаемые версии билдов
+const VERSIONS = [
+    '0.0.1',
+]
 
 @method("GET")
-@authUser
 export default class Init extends BaseApi {
     /**
      * Базовый конструктор класса
      * 
      * @constructor
-     * @this Ping
+     * @this Init
      */
     constructor() {
         super();
     }
 
     /**
-     * Метод для поднятия юзера в памяти
+     * Метод для инициализация игры и отдачи первычных данных
      *
      * @override
-     * @param {String} version - 
-     * @this Ping
+     * @param {String} version - версия приложения
+     * @param {String} platform - платформа приложения
+     * @this Init
      * @returns {Promise<boolean>}
      */
-    async process({version}) {
-        // const data = Buffer.from(cookie, "hex");
-        
+    async process({version, platform}) {
+        if (version === undefined)
+            throw new ErrorApiMethod(`Parameter "version" is missing`, "PARAMETER_IS_MISSING", 400);
+
+        if (platform === undefined)
+            throw new ErrorApiMethod(`Parameter "platform" is missing`, "PARAMETER_IS_MISSING", 400);
+
+        if (!VERSIONS.includes(version))
+            throw new ErrorApiMethod(`Client version [${version}] is not more supported`, "NOTSUPPORTED_CLIENT_VERSION", 500);
+
+        if (!PLATFORMS.includes(platform))
+            throw new ErrorApiMethod(`Platform [${platform}] is not more supported`, "NOTSUPPORTED_CLIENT_PLATFORM", 500);
+
         console.log(this._headers);
 
-        const userId = "test";
-        users.set(userId, {user: 123});
-        const sid = users.init();
-        return {
-            user: users.get(userId),
-            sid
-        };
+        return {};
     }
 
 }

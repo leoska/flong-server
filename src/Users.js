@@ -70,6 +70,13 @@ class Users {
     }
 
     /**
+     * 
+     */
+    async register() {
+        
+    }
+
+    /**
      * Сохранение всех юзеров
      * 
      * @async

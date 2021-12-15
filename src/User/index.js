@@ -63,6 +63,9 @@ export default class User {
         return this._sessionId;
     }
 
+    /**
+     * Генерация bearer токена для авторизации
+     */
     generateToken() {
         this._token = crypto.randomBytes(tokenBytesLength).toString('hex');
     }

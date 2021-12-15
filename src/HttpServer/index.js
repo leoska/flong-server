@@ -13,6 +13,12 @@ const DEFAULT_HTTP_PORT = 25565;
 export default class HttpServer {
     _server = null;
     _app = null;
+
+    // В объект api кладутся поддерживаемые АПИ-методы
+    // _api = {
+    //     'GET': {},
+    //     'POST': {},
+    // };
     _api = {};
 
     /**
@@ -185,35 +191,52 @@ export default class HttpServer {
                 // 200 - OK
                 res.json(await apiInstance.callProcess());
             } catch(e) {
+                let response;
+
                 if (e instanceof ErrorApiMethod) {
-                    console.error(colors.red(`[HTTP-Server] ${e.message}`));
+                    console.error(colors.red(`[HTTP-Server] ${e.stack || e.message}`));
                     
+                    // Можно просто отправить статус
+                    // res.sendStatus(e.status);
+
                     res.status(e.status);
-                    res.end(JSON.stringify({
+                    response = JSON.stringify({
                         error: e.code,
                         stack: e.stack,
-                    }));
+                    });
                 } else {
                     // Обработка INTERNAL_SERVER_ERROR (500)
                     console.error(colors.red(`[HTTP-Server] Request API [${apiName}] failed.\n${e.stack}`));
 
                     res.status(500);
-                    res.end(JSON.stringify({
+                    response = JSON.stringify({
                         error: "INTERNAL_SERVER_ERROR",
                         stack: e.stack,
-                    }));
+                    });
                 }
+
+                // Добавляем заголовок, что тип ответа - json и размер ответа
+                res.header("Content-Type", "application/json; charset=utf-8");
+                res.header("Content-Length", Buffer.byteLength(response, "utf-8"));
+
+                // Отправляем ответ
+                res.end(response);
             }
         };
         
+        // Добавляем заголовки в middleware
         this._app.use((req, res, next) => {
+            // Добавляем заголовки во избежания CORS политик
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Methods", "GET, POST");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
             next();
         });
 
+        // Роутинг POST-методов
         this._app.post("/api/:apiName", (req, res) => responseHandler(req, res, 'POST'));
+
+        // Роутинг GET-методов
         this._app.get("/api/:apiName", (req, res) => responseHandler(req, res, 'GET'));
     }
 }

@@ -1,5 +1,4 @@
 import ErrorApiMethod from './ErrorApiMethod';
-import User from './User';
 import Users from './Users';
 
 /**

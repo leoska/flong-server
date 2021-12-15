@@ -73,16 +73,8 @@ export default class BaseApi {
      * @returns {Promise<Object>}
      */
     async callProcess() {
-        try {
-            return {
-                response: await Promise.race([timeout(API_TIMEOUT), this.process(this._params || {})])
-            };
-        } catch(e) {
-            console.error(colors.red(e.stack));
-
-            return {
-                error: e.toString()
-            };
-        }
+        return {
+            response: await Promise.race([timeout(API_TIMEOUT), this.process(this._params || {})]),
+        };
     }
 }
