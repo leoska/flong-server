@@ -9,6 +9,9 @@ import Application           from '../Application';
 const DEFAULT_HTTP_HOST = "0.0.0.0";
 const DEFAULT_HTTP_PORT = 25565;
 
+const _initApi = Symbol('_initApi');
+const _initExpress = Symbol('_initExpress');
+
 // Базовый класс Http сервера, который поднимается в Application
 export default class HttpServer {
     _server = null;
@@ -41,10 +44,10 @@ export default class HttpServer {
      */
     async init() {
         // Initialize API
-        await this._initApi();
+        await this[_initApi]();
 
         // Initialize Express Routes
-        this._initExpress();
+        this[_initExpress]();
 
         // Initialize http-server
         this.server = http.createServer(this._app);
@@ -82,7 +85,7 @@ export default class HttpServer {
      * @this Application
      * @returns {Promise<void>}
      */
-    async _initApi() {
+    async [_initApi]() {
         /**
          * Функция для возврата свойств файла/папки
          * 
@@ -140,6 +143,9 @@ export default class HttpServer {
                             const apiModule = require(filePath).default;
                             
                             if (apiModule.isApi && apiModule.isApi()) {
+                                if (this._api[apiName])
+                                    throw new Error(`[HTTP-Server] API ${apiName} is already initialized!`);
+
                                 console.log(colors.green(`[HTTP-Server] API ${apiModule.name} successfully initialized.`));
                                 this._api[apiName] = apiModule;
                             }
@@ -161,7 +167,7 @@ export default class HttpServer {
      * @this Application
      * @returns {void}
      */
-    _initExpress() {
+    [_initExpress]() {
         // Обработка POST/GET запросов классами API
         const responseHandler = async (req, res, method) => {
             // req.headers["x-forwarded-for"] <-- этот заголовок обычно вкладывается NGINX'ом
@@ -232,6 +238,8 @@ export default class HttpServer {
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
             next();
         });
+
+        this._app.use(express.json());
 
         // Роутинг POST-методов
         this._app.post("/api/:apiName", (req, res) => responseHandler(req, res, 'POST'));

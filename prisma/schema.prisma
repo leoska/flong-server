@@ -10,3 +10,24 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  @@map(name: "user")
+  id                Int       @default(autoincrement()) @id
+  username          String    @db.VarChar(100) @unique
+  token             Bytes     @db.Binary(24)
+  stamp_create      DateTime  @db.Timestamp()
+  last_online       DateTime  @db.Timestamp()
+  active            Active    @default(y)
+  email             String    @db.VarChar(320)
+  platform          Platform
+}
+
+enum Active {
+  y
+
+}
+
+enum Platform {
+  html5
+}

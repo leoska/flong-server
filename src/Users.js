@@ -1,4 +1,5 @@
 import User from "./User";
+import { PrismaClient } from '@prisma/client';
 
 const METHODS = [
     'set',
@@ -72,7 +73,7 @@ class Users {
     /**
      * 
      */
-    async register() {
+    async register(username, password) {
         
     }
 

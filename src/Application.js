@@ -1,11 +1,24 @@
 import HttpServer from "./HttpServer";
-import WebSocketServer from "./WebSocketServer";
+import Protocol from './Protocol';
+import Config from './Config';
 
 const DEFAULT_CONFIG_ENV = 'develop';
+const ARGV_CONFIG_ENV = process.argv[2] || '';
 
+/**
+ * Сингл-тон класс всего сервера
+ * 
+ * Возможно, буду использовать thread для поднятия игровых сессии.
+ * Сервер в данном служит обычным "передатчиком" между клиентом и клиентом
+ * Клиент, который начал сессию, является "сервером" -> он просчитывает физику и является валидирующим
+ * 
+ * Юзер сначала устанавливает соединение по Http, проходит этап авторизации, далее уставливает соединение по [Protocol]у
+ * HTTP остается так же активным для управление сервером
+ * 
+ */
 class Application {
     _httpServer = null;
-    _wsServer = null;
+    _gameServer = null;
     _terminating = false;
     _players = [];
     _gameRooms = [];
@@ -42,8 +55,15 @@ class Application {
      * @returns {Application}
      */
     constructor() {
+        Config.init(ARGV_CONFIG_ENV || DEFAULT_CONFIG_ENV);
+
+        const protocol = Config.get('protocol');
+
+        if (!Protocol[protocol])
+            throw new Error(`[Application] undefined protocol type! [${protocol}]. Available protocols: [${(Object.keys(Protocol) || []).join(', ')}]`);
+
         this._httpServer         = new HttpServer();
-        this._wsServer           = new WebSocketServer();
+        this._gameServer         = new Protocol[protocol].Server;
         this._terminating        = false;
     }
 
@@ -59,8 +79,8 @@ class Application {
         // Initialize Http-Server
         await this._httpServer.init();
 
-        // Initialize WebSocket-Server
-        await this._wsServer.init();
+        // Initialize Game-Server
+        await this._gameServer.init();
 
 
     }
@@ -78,7 +98,7 @@ class Application {
 
         await Promise.all([
             this._httpServer.stop(),
-            this._wsServer.stop(),
+            this._gameServer.stop(),
         ]);
     }
 }

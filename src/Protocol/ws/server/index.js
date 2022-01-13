@@ -1,6 +1,6 @@
 import ws from "ws";
 import colors from "colors";
-import WebSocketClient from "./WebSocketClient";
+import WebSocketClient from "./../socket";
 
 const DEFAULT_WS_PORT = 25569;
 

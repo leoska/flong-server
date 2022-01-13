@@ -1,9 +1,8 @@
 import BaseApi       from '../../BaseApi';
-import { authUser, method }    from '../../../utils';
+import { method }    from '../../../utils';
 import users         from '../../../Users';
 
 @method("POST")
-@authUser
 export default class Auth extends BaseApi {
     /**
      * Базовый конструктор класса

@@ -2,31 +2,41 @@ import BaseApi       from '../../BaseApi';
 import { method }    from '../../../utils';
 import users         from '../../../Users';
 
+/**
+ * 
+ */
+
 @method("POST")
-export default class Auth extends BaseApi {
+export default class Register extends BaseApi {
     /**
      * Базовый конструктор класса
      * 
      * @constructor
-     * @this Auth
+     * @this Register
      */
     constructor() {
         super();
     }
 
     /**
-     * Метод для поднятия юзера в памяти (инициализация игры)
+     * Метод для регистрации юзера (логин и пароль)
      *
      * @override
-     * @param {String} data - логин и пароль в base64
-     * @param {String} platform - платформа приложения
-     * @this Auth
+     * @param {String} payload - логин и пароль в base64
+     * @this Register
      * @returns {Promise<boolean>}
      */
-    async process({data}) {
-        const data = Buffer.from(cookie, "hex");
-        
-        console.log(this._headers);
+    async process({payload}) {
+        const usernameAndPass = Buffer.from(payload, 'base64').toString();
+        const [username, password] = usernameAndPass.split("|");
+
+        try {
+            await users.register(username, password);
+        } catch(e) {
+            console.error(e);
+        }
+
+        console.log([login, password]);
 
         const userId = "test";
         users.set(userId, {user: 123});
