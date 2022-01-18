@@ -1,33 +1,67 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["interactiveTransactions"]
-}
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
 model User {
   @@map(name: "user")
   id                Int       @default(autoincrement()) @id
-  username          String    @db.VarChar(100) @unique
+  email             String    @db.VarChar(320) @unique
+  username          String    @db.VarChar(100) @default("player")
   token             Bytes     @db.Binary(24)
-  stamp_create      DateTime  @db.Timestamp()
-  last_online       DateTime  @db.Timestamp()
-  active            Active    @default(y)
-  email             String    @db.VarChar(320)
+  stamp_create      DateTime  @db.Timestamp() @default(now())
+  last_online       DateTime  @db.Timestamp() @default(now())
+  active            Boolean   @default(true)
   platform          Platform
+  skins             Skin[]
+  sessions          Session[]
 }
 
-enum Active {
-  y
+model Skin {
+  @@map(name: "skin")
+  user_id           Int
+  skin_type         SkinType
+  user              User      @relation(fields: [user_id], references: [id])
+  
+  @@id([user_id, skin_type])
+}
 
+model Session {
+  @@map(name: "session")
+  id                Int       @default(autoincrement()) @id
+  user_id           Int
+  session_id        String    @db.VarChar(24)
+  stamp_create      DateTime  @db.Timestamp() @default(now())
+  user              User      @relation(fields: [user_id], references: [id])
+}
+
+model Match {
+  @@map(name: "match")
+  id                Int       @default(autoincrement()) @id
+  stamp_create      DateTime  @db.Timestamp() @default(now())
+  status            Status
 }
 
 enum Platform {
   html5
+}
+
+enum SkinType {
+  head
+  body
+  legs
+  accessory
+}
+
+enum Status {
+  completed
+  canceled
 }

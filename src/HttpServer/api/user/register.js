@@ -22,29 +22,26 @@ export default class Register extends BaseApi {
      * Метод для регистрации юзера (логин и пароль)
      *
      * @override
-     * @param {String} payload - логин и пароль в base64
+     * @param {String} payload - почта и пароль в base64
      * @this Register
      * @returns {Promise<boolean>}
      */
     async process({payload}) {
         const usernameAndPass = Buffer.from(payload, 'base64').toString();
-        const [username, password] = usernameAndPass.split("|");
+        const [email, password] = usernameAndPass.split("|");
+
+        console.log([email, password]);
 
         try {
-            await users.register(username, password);
+            await users.register(email, password);
+
+            return {
+                res: true
+            };
         } catch(e) {
             console.error(e);
+            throw e;
         }
-
-        console.log([login, password]);
-
-        const userId = "test";
-        users.set(userId, {user: 123});
-        const sid = users.init();
-        return {
-            user: users.get(userId),
-            sid
-        };
     }
 
 }

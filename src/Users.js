@@ -1,11 +1,23 @@
 import User from "./User";
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
+
+const { user } = new PrismaClient();
 
 const METHODS = [
     'set',
     'get',
     'has',
 ];
+
+const PASSWORD_REGEX = /^(?=.*?[a-zA-Z0-9])(?!.*?[=?<>()'"\/\&]).{6,20}$/;
+
+// RFC 2822
+// https://www.regular-expressions.info/email.html
+const EMAIL_REGEX = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
+// Степень хэширования (соль)
+const SALT_ROUNDS = 10;
 
 /**
  * Сигнлтоновский класс, список юзеров на сервере
@@ -71,10 +83,47 @@ class Users {
     }
 
     /**
+     * Регистрация пользователя
      * 
+     * @async
+     * @public
+     * @param {String} email
+     * @param {String} password
+     * @this Users
+     * @returns {any}
      */
-    async register(username, password) {
-        
+    async register(email, password) {
+        // Проверяем почту
+        if (!EMAIL_REGEX.test(email))
+            throw new Error(`Email is invalid!`);
+
+        // Проверяем пароль
+        if (!PASSWORD_REGEX.test(password))
+            throw new Error(`Password must contains only a characters, digits and special symbols. Length is minimum 8 and maximum 20.`);
+
+        // Проверяем, существует ли такой юзер в базе данных
+        const userAlreadyExists = await user.findFirst({
+            select: {
+                email: true,
+                username: true,
+            },
+            where: {
+                email
+            },
+        });
+
+        if (userAlreadyExists)
+            throw new Error(`User with mail: [${email}] is already exists.`);
+
+        // Хэшируем пароль
+        const hashPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+        // Создаём юзера в БД
+        const userDb = await user.create({
+            data: {
+                
+            }
+        });
     }
 
     /**

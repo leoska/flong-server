@@ -25,6 +25,8 @@
   "author": "leoska",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^3.5.0",
+    "bcrypt": "^5.0.1",
     "colors": "^1.4.0",
     "crypto": "^1.0.1",
     "express": "^4.17.1",
@@ -41,5 +43,8 @@
     "@babel/plugin-proposal-decorators": "^7.14.5",
     "@babel/preset-env": "^7.14.7",
     "prisma": "^3.5.0"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
   }
 }

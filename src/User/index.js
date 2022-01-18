@@ -41,11 +41,12 @@ export default class User {
      * Базовый конструктор
      * 
      * @constructor
+     * @param {Object} [user]
      * @this User
      * @returns {User}
      */
-    constructor() {
-
+    constructor(user = null) {
+        
     }
     
     /**
