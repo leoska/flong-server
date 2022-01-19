@@ -208,6 +208,7 @@ export default class HttpServer {
                     res.status(e.status);
                     response = JSON.stringify({
                         error: e.code,
+                        message: e.message,
                         stack: e.stack,
                     });
                 } else {
@@ -217,7 +218,9 @@ export default class HttpServer {
                     res.status(500);
                     response = JSON.stringify({
                         error: "INTERNAL_SERVER_ERROR",
-                        stack: e.stack,
+                        message: e.message,
+                        // TODO: закомментировал пока e.stack, не вижу в нём необходимость
+                        // stack: e.stack,
                     });
                 }
 

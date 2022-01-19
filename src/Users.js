@@ -121,7 +121,9 @@ class Users {
         // Создаём юзера в БД
         const userDb = await user.create({
             data: {
-                
+                email,
+                password: Buffer.from(hashPassword),
+                platform: 'html5',
             }
         });
     }

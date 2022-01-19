@@ -16,7 +16,8 @@ model User {
   id                Int       @default(autoincrement()) @id
   email             String    @db.VarChar(320) @unique
   username          String    @db.VarChar(100) @default("player")
-  token             Bytes     @db.Binary(24)
+  token             Bytes?    @db.Binary(24)
+  password          Bytes     @db.Blob()
   stamp_create      DateTime  @db.Timestamp() @default(now())
   last_online       DateTime  @db.Timestamp() @default(now())
   active            Boolean   @default(true)

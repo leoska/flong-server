@@ -39,7 +39,6 @@ export default class Register extends BaseApi {
                 res: true
             };
         } catch(e) {
-            console.error(e);
             throw e;
         }
     }
