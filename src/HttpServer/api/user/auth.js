@@ -23,7 +23,7 @@ export default class Auth extends BaseApi {
      * @this Auth
      * @returns {Promise<boolean>}
      */
-    async process({}) {
+    async process({}, {}) {
         // const data = Buffer.from(cookie, "hex");
         
         console.log(this._headers);

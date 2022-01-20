@@ -21,7 +21,7 @@ export default class Ping extends BaseApi {
      * @this Ping
      * @returns {Promise<boolean>}
      */
-    async process({}) {
+    async process({}, {}) {
         return true;
     }
 

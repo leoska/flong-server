@@ -173,8 +173,8 @@ export default class HttpServer {
             // req.headers["x-forwarded-for"] <-- этот заголовок обычно вкладывается NGINX'ом
             const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
             const apiName = req.params.apiName;
-            // Склеиваем и body и query параметры
-            const reqBody = Object.assign({}, req.query, req.body);
+            const reqParams = Object.assign({}, req.query);
+            const reqBody = Object.assign({}, req.body);
             const reqHeaders = Object.assign({}, req.headers);
 
             try {
@@ -191,7 +191,8 @@ export default class HttpServer {
                 }
                 
                 const apiInstance = new api(method);
-                apiInstance.params = reqBody;
+                apiInstance.params = reqParams;
+                apiInstance.body = reqBody;
                 apiInstance.headers = reqHeaders;
 
                 // 200 - OK
@@ -242,6 +243,7 @@ export default class HttpServer {
             next();
         });
 
+        // Конвертируем всё в json
         this._app.use(express.json());
 
         // Роутинг POST-методов

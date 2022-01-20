@@ -5,6 +5,7 @@ const API_TIMEOUT = 20000;
 
 export default class BaseApi {
     _params = null;
+    _body = null;
     _headers = null;
 
     /**
@@ -29,6 +30,18 @@ export default class BaseApi {
     }
 
     /**
+     * Сеттер для тело запроса (POST)
+     * 
+     * @setter
+     * @public
+     * @param {Object} body
+     * @this BaseApi
+     */
+    set body(body) {
+        this._body = body;
+    }
+
+    /**
      * Сеттер для заголовков
      * 
      * @setter
@@ -49,6 +62,7 @@ export default class BaseApi {
      */
     constructor() {
         this._params = null;
+        this._body = null;
         this._headers = null;
     }
     
@@ -57,10 +71,11 @@ export default class BaseApi {
      * 
      * @public
      * @virtual
-     * @param {any} [data]
+     * @param {Object} [params] - Параметры запроса
+     * @param {Object} [body] - Тело запроса
      * @returns {any}
      */
-    async process(data) {
+    async process(data, body) {
         throw new Error(`Try to call virtual method.`);
     }
     
@@ -74,7 +89,7 @@ export default class BaseApi {
      */
     async callProcess() {
         return {
-            response: await Promise.race([timeout(API_TIMEOUT), this.process(this._params || {})]),
+            response: await Promise.race([timeout(API_TIMEOUT), this.process(this._params || {}, this._body || {})]),
         };
     }
 }

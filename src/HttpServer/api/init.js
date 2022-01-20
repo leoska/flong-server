@@ -33,7 +33,7 @@ export default class Init extends BaseApi {
      * @this Init
      * @returns {Promise<boolean>}
      */
-    async process({version, platform}) {
+    async process({version, platform}, {}) {
         if (version === undefined)
             throw new ErrorApiMethod(`Parameter "version" is missing`, "PARAMETER_IS_MISSING", 400);
 
@@ -45,8 +45,6 @@ export default class Init extends BaseApi {
 
         if (!PLATFORMS.includes(platform))
             throw new ErrorApiMethod(`Platform [${platform}] is not more supported`, "NOTSUPPORTED_CLIENT_PLATFORM", 500);
-
-        console.log(this._headers);
 
         return {};
     }

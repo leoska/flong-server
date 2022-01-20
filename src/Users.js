@@ -1,8 +1,7 @@
 import User from "./User";
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-
-const { user } = new PrismaClient();
+import colors from 'colors';
 
 const METHODS = [
     'set',
@@ -32,8 +31,29 @@ class Users {
      */
     constructor() {
         Object.defineProperties(this, {
-            _data: { value: new Map(), enumerable: false, configurable: false, writable: false }
+            _data: { value: new Map(), enumerable: false, configurable: false, writable: false },
+            _db: {value: new PrismaClient(), enumerable: false, configurable: false, writable: false },
         });
+    }
+
+    /**
+     * Остановка приложения
+     * 
+     * @async
+     * @public
+     * @this Users
+     * @returns {Promise<void>}
+     */
+    async stop() {
+        try {
+            // Сохраняем всех юзеров в ДБ
+            await this.saveAll();
+
+            // Закрываем подключение к ДБ (PrismaClient)
+            await this._db.$disconnect();
+        } catch(e) {
+            console.error(colors.red(`[Users] ${e.stack}`));
+        }
     }
 
     /**
@@ -82,6 +102,8 @@ class Users {
         }
     }
 
+
+
     /**
      * Регистрация пользователя
      * 
@@ -102,7 +124,7 @@ class Users {
             throw new Error(`Password must contains only a characters, digits and special symbols. Length is minimum 8 and maximum 20.`);
 
         // Проверяем, существует ли такой юзер в базе данных
-        const userAlreadyExists = await user.findFirst({
+        const userAlreadyExists = await this._db.user.findFirst({
             select: {
                 email: true,
                 username: true,
@@ -119,13 +141,20 @@ class Users {
         const hashPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
         // Создаём юзера в БД
-        const userDb = await user.create({
+        const userDb = await this._db.user.create({
             data: {
                 email,
                 password: Buffer.from(hashPassword),
                 platform: 'html5',
             }
         });
+
+        // Создаем объект User
+        const user = new User(userDb);
+
+        // Генерируем идентификатор игровой сессии
+        const sessionId = user.generateSessionId();
+
     }
 
     /**

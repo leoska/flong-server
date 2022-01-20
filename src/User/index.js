@@ -1,4 +1,6 @@
 import crypto from "crypto";
+import UserData from "./UserData";
+import { PrismaClient } from '@prisma/client';
 
 // Размер идентификатора сессии
 const sessionBytesLength = 16;
@@ -12,6 +14,7 @@ export default class User {
     _sessionId = ""; // Идентификатор сессии
     _token = null; // Токен авторизации юзера
     _id = 0; // Идентификатор игрока
+    _data = null; // Данные юзера (UserData)
 
     /**
      * Получение идентификатора игрока
@@ -45,8 +48,8 @@ export default class User {
      * @this User
      * @returns {User}
      */
-    constructor(user = null) {
-        
+    constructor(data = null) {
+        this._data = new UserData(data || {});
     }
     
     /**
@@ -76,10 +79,20 @@ export default class User {
      * 
      * @async
      * @public
+     * @param {PrismaClient} [db]
      * @this User
      * @returns {Promise<void>}
      */
-    async save() {
-        
+    async save(db = null) {
+        let needDisconnect = false;
+
+        if (!db) {
+            db = new PrismaClient();
+            needDisconnect = true;
+        }
+            
+        await db.user.update({
+            where: 
+        })
     }
 }

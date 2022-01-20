@@ -26,7 +26,7 @@ export default class Register extends BaseApi {
      * @this Register
      * @returns {Promise<boolean>}
      */
-    async process({payload}) {
+    async process({}, {payload}) {
         const usernameAndPass = Buffer.from(payload, 'base64').toString();
         const [email, password] = usernameAndPass.split("|");
 
