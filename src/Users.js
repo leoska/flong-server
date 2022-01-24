@@ -1,4 +1,4 @@
-import User from "./User";
+import { User } from "./User";
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import colors from 'colors';
@@ -102,8 +102,6 @@ class Users {
         }
     }
 
-
-
     /**
      * Регистрация пользователя
      * 
@@ -150,11 +148,28 @@ class Users {
         });
 
         // Создаем объект User
+        console.log(User);
         const user = new User(userDb);
+
+        // Проверяем id юзера
+        if (!user.id)
+            throw new Error(`[Users -> register] user's id less that 1 or is null.`);
 
         // Генерируем идентификатор игровой сессии
         const sessionId = user.generateSessionId();
 
+        // Генерируем bearer токен
+        const jwtToken = await user.generateToken();
+
+        // Загружаем user'a в Users
+        this.set(user.id, user);
+
+        // Возвращаем первичные авторизационные данные
+        return {
+            id: user.id,
+            sessionId,
+            jwtToken,
+        }
     }
 
     /**
@@ -168,8 +183,9 @@ class Users {
     async saveAll() {
         const tasks = [];
 
+        // TODO: при большой кол-ве юзеров можно увеличить кол-во открытых коннектов к ДБ
         for (const user of this._data)
-            tasks.push(user.save());
+            tasks.push(user.save(this._db));
 
         await Promise.all(tasks);
     }

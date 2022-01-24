@@ -2,8 +2,8 @@ import BaseApi       from '../../BaseApi';
 import { method }    from '../../../utils';
 import users         from '../../../Users';
 
-@method("POST")
-export default class UserAuth extends BaseApi {
+@method("PUT")
+export default class UserUpdate extends BaseApi {
     /**
      * Базовый конструктор класса
      * 

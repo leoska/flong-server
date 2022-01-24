@@ -3,11 +3,11 @@ import { method }    from '../../../utils';
 import users         from '../../../Users';
 
 /**
- * 
+ * Метод для регистрации пользователя
  */
 
 @method("POST")
-export default class Register extends BaseApi {
+export default class UserRegister extends BaseApi {
     /**
      * Базовый конструктор класса
      * 
@@ -27,17 +27,14 @@ export default class Register extends BaseApi {
      * @returns {Promise<boolean>}
      */
     async process({}, {payload}) {
+        if (payload === undefined)
+            throw new ErrorApiMethod(`Parameter "payload" is missing`, "PARAMETER_IS_MISSING", 400);
+
         const usernameAndPass = Buffer.from(payload, 'base64').toString();
         const [email, password] = usernameAndPass.split("|");
 
-        console.log([email, password]);
-
         try {
-            await users.register(email, password);
-
-            return {
-                res: true
-            };
+            return await users.register(email, password);
         } catch(e) {
             throw e;
         }

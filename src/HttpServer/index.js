@@ -177,6 +177,8 @@ export default class HttpServer {
             const reqBody = Object.assign({}, req.body);
             const reqHeaders = Object.assign({}, req.headers);
 
+            console.log(req);
+
             try {
                 // Обработка SERVER_TERMINATING (503)
                 if (Application.terminating) {
@@ -238,7 +240,7 @@ export default class HttpServer {
         this._app.use((req, res, next) => {
             // Добавляем заголовки во избежания CORS политик
             res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Methods", "GET, POST");
+            res.header("Access-Control-Allow-Methods", "GET, POST, PUT");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
             next();
         });
@@ -248,8 +250,9 @@ export default class HttpServer {
 
         // Роутинг POST-методов
         this._app.post("/api/:apiName", (req, res) => responseHandler(req, res, 'POST'));
-
         // Роутинг GET-методов
         this._app.get("/api/:apiName", (req, res) => responseHandler(req, res, 'GET'));
+        // Роутинг PUT-методов
+        this._app.put("/api/:apiName", (req, res) => responseHandler(req, res, 'PUT'));
     }
 }
