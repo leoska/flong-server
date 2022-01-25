@@ -1,7 +1,7 @@
 import User from './User';
 import UserData from './UserData';
 
-export default {
+export {
     User,
     UserData,
 };

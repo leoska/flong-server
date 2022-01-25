@@ -177,8 +177,6 @@ export default class HttpServer {
             const reqBody = Object.assign({}, req.body);
             const reqHeaders = Object.assign({}, req.headers);
 
-            console.log(req);
-
             try {
                 // Обработка SERVER_TERMINATING (503)
                 if (Application.terminating) {

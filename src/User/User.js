@@ -13,7 +13,7 @@ const tokenBytesLength = 24;
 
 // Чтение ключей для jwt RS256 sign
 const privateKey = fs.readFileSync(`${__dirname}/../../settings/jwtRS256.key`);
-const pubKey = fs.readFileSync(`${__dirname}/../../settings/jwtRS256.key.pub`);
+const pubKey = fs.readFileSync(`${__dirname}/../../settings/jwtRS256.key.public`);
 
 const jwtSign = promisify(jwt.sign);
 
@@ -22,7 +22,6 @@ export default class User {
     _httpSocket = null; // HTTP-сокет
     _sessionId = ""; // Идентификатор сессии
     _token = null; // Токен авторизации юзера
-    _id = 0; // Идентификатор игрока
     _data = null; // Данные юзера (UserData)
 
     /**
@@ -86,8 +85,7 @@ export default class User {
      * @returns {String}
      */
     async generateToken() {
-        this._token = await jwtSign({id}, pubKey);
-        this._data.set('token', this._token);
+        this._token = await jwtSign({id: this.id}, pubKey);
         return this._token;
     }
 

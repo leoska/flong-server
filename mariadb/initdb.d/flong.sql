@@ -18,7 +18,7 @@ CREATE TABLE `flong`.`user`(
     id INT NOT NULL AUTO_INCREMENT,
     email VARCHAR(320) NOT NULL,
     username VARCHAR(100) NOT NULL DEFAULT("player"),
-    token binary(24) NOT NULL,
+    password BLOB NOT NULL,
     stamp_create TIMESTAMP NOT NULL DEFAULT(current_timestamp),
     last_online TIMESTAMP NOT NULL DEFAULT(current_timestamp),
     active BOOLEAN NOT NULL DEFAULT(true),

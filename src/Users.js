@@ -9,6 +9,7 @@ const METHODS = [
     'has',
 ];
 
+// Все латинские буквы (большие и маленькие) + некоторые специальные символы и цифры (общая длина от 6 до 20 знаков)
 const PASSWORD_REGEX = /^(?=.*?[a-zA-Z0-9])(?!.*?[=?<>()'"\/\&]).{6,20}$/;
 
 // RFC 2822
@@ -96,7 +97,6 @@ class Users {
             const user = new User();
             const sid = user.generateSessionId();
 
-
         } catch(e) {
 
         }
@@ -148,7 +148,6 @@ class Users {
         });
 
         // Создаем объект User
-        console.log(User);
         const user = new User(userDb);
 
         // Проверяем id юзера
@@ -158,7 +157,7 @@ class Users {
         // Генерируем идентификатор игровой сессии
         const sessionId = user.generateSessionId();
 
-        // Генерируем bearer токен
+        // Генерируем JWT bearer токен
         const jwtToken = await user.generateToken();
 
         // Загружаем user'a в Users
@@ -168,7 +167,7 @@ class Users {
         return {
             id: user.id,
             sessionId,
-            jwtToken,
+            jwtToken: Buffer.from(jwtToken, 'utf-8').toString('base64'),
         }
     }
 
@@ -184,10 +183,18 @@ class Users {
         const tasks = [];
 
         // TODO: при большой кол-ве юзеров можно увеличить кол-во открытых коннектов к ДБ
-        for (const user of this._data)
-            tasks.push(user.save(this._db));
+        for (const [id, user] of this._data) {
+            const task = user.save(this._db).then(() => {
+                console.info(colors.green(`[Users] User with id [${id}] has successfully saved.`));
+            }, (err) => {
+                console.error(colors.red(`[Users] User not saved: ${err.stack}`));
+            });
 
-        await Promise.all(tasks);
+            tasks.push(task);
+            console.warn(colors.bgCyan(`[Users] User with id [${id}] trying to save.`));
+        }
+
+        await Promise.allSettled(tasks);
     }
 
     /**

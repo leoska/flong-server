@@ -2,6 +2,12 @@ import BaseApi       from '../../BaseApi';
 import { method }    from '../../../utils';
 import users         from '../../../Users';
 
+/**
+ * Метод для авторизации пользователя
+ * 
+ * Возвращает JWT с необходимой мета информацией
+ */
+
 @method("POST")
 export default class UserAuth extends BaseApi {
     /**
@@ -18,23 +24,22 @@ export default class UserAuth extends BaseApi {
      * Метод для авторизации юзера
      *
      * @override
-     * @param {String} version - версия приложения
-     * @param {String} platform - платформа приложения
+     * @param {String} payload - почта и пароль в base64
      * @this Auth
      * @returns {Promise<boolean>}
      */
-    async process({}, {}) {
-        // const data = Buffer.from(cookie, "hex");
-        
-        console.log(this._headers);
+    async process({}, {payload}) {
+        if (payload === undefined)
+            throw new ErrorApiMethod(`Parameter "payload" is missing`, "PARAMETER_IS_MISSING", 400);
 
-        const userId = "test";
-        users.set(userId, {user: 123});
-        const sid = users.init();
-        return {
-            user: users.get(userId),
-            sid
-        };
+        const usernameAndPass = Buffer.from(payload, 'base64').toString();
+        const [email, password] = usernameAndPass.split("|");
+
+        try {
+            return await users.authorize(email, password);
+        } catch(e) {
+            throw e;
+        }
     }
 
 }
