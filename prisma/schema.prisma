@@ -65,3 +65,9 @@ enum Status {
   completed
   canceled
 }
+
+enum UserStatus {
+  offline
+  menu
+  playing
+}

@@ -33,6 +33,7 @@ class Users {
     constructor() {
         Object.defineProperties(this, {
             _data: { value: new Map(), enumerable: false, configurable: false, writable: false },
+            _tokenStore: { value: new WeakMap(), enumerable: false, configurable: false, writable: false },
             _db: {value: new PrismaClient(), enumerable: false, configurable: false, writable: false },
         });
     }
@@ -110,7 +111,7 @@ class Users {
      * @param {String} email
      * @param {String} password
      * @this Users
-     * @returns {any}
+     * @returns {Promise<any>}
      */
     async register(email, password) {
         // Проверяем почту
@@ -147,6 +148,9 @@ class Users {
             }
         });
 
+        // Удаляем password из объекта, он не требуется в игровой логике
+        delete userDb['password'];
+        
         // Создаем объект User
         const user = new User(userDb);
 
@@ -169,6 +173,72 @@ class Users {
             sessionId,
             jwtToken: Buffer.from(jwtToken, 'utf-8').toString('base64'),
         }
+    }
+
+    /**
+     * Авторизация пользователя
+     * 
+     * @async
+     * @public
+     * @param {String} email
+     * @param {String} password
+     * @this Users
+     * @returns {Promise<any>}
+     */
+    async authorize(email, password) {
+        // Проверяем почту
+        if (!EMAIL_REGEX.test(email))
+            throw new Error(`Email is invalid!`);
+
+        // Проверяем пароль
+        if (!PASSWORD_REGEX.test(password))
+            throw new Error(`Password must contains only a characters, digits and special symbols. Length is minimum 8 and maximum 20.`);
+
+        // Пытаемся достать юзера из базы данных
+        const userDb = await this._db.user.findFirst({
+            where: {
+                email,
+            },
+        });
+
+        if (!userDb)
+            throw new Error(`User with mail: [${email}] is not exists.`);
+
+        // Проверяем пароль
+        const match = await bcrypt.compare(password, userDb.password);
+        if (!match)
+            throw new Error(`Incorrect password!`);
+
+        // Удаляем password из объекта, он не требуется в игровой логике
+        delete userDb['password'];
+
+        // Проверяем, не загружен ли юзер уже
+        if (this.has(userDb.id)) {
+            const user = this.get(userDb.id);
+
+            // Проверяем находится ли игрок сейчас в игровой сессии
+
+        } else {
+            // Создаем объект User
+            const user = new User(userDb);
+
+            // Генерируем идентификатор игровой сессии
+            const sessionId = user.generateSessionId();
+
+            // Генерируем JWT bearer токен
+            const jwtToken = await user.generateToken();
+        }
+        // Загружаем user'a в Users
+        this.set(user.id, user);
+    }
+
+    /**
+     * Сохранение и выгрузка юзера из памяти
+     * 
+     * @param {Number} userId 
+     */
+    async unload(userId) {
+
     }
 
     /**
@@ -195,35 +265,6 @@ class Users {
         }
 
         await Promise.allSettled(tasks);
-    }
-
-    /**
-     * Получение игрока по фильтру. Метод возвращает первое вхождение по фильтру
-     * 
-     * @public
-     * @param {Object} filter
-     * @this Users
-     * @returns {User|null}
-     */
-    getBy(filter) {
-        // Перечисляем каждого игрока в памяти
-        for (const item of this) {
-            let flag = true; // Предполагаем, что item подходит
-
-            // TODO: можно проверять вложенные объекты с проверкой рекурсии
-            // Проверяем все параметры фильтра
-            for (const [key, value] of Object.entries(filter)) {
-                if (typeof(item[key]) !== typeof(value) || item[key] !== value) {
-                    flag = false;
-                    break;
-                }
-            }
-
-            if (flag)
-                return item;
-        }
-
-        return null;
     }
 }
 
