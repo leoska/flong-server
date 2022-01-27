@@ -150,7 +150,7 @@ class Users {
 
         // Удаляем password из объекта, он не требуется в игровой логике
         delete userDb['password'];
-        
+
         // Создаем объект User
         const user = new User(userDb);
 
@@ -217,7 +217,7 @@ class Users {
             const user = this.get(userDb.id);
 
             // Проверяем находится ли игрок сейчас в игровой сессии
-
+            
         } else {
             // Создаем объект User
             const user = new User(userDb);
