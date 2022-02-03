@@ -20,7 +20,7 @@ const EMAIL_REGEX = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-
 const SALT_ROUNDS = 10;
 
 /**
- * Сигнлтоновский класс, список юзеров на сервере
+ * Сигнлтоновский класс, Map юзеров на сервере
  */
 class Users {
     /**
@@ -217,7 +217,9 @@ class Users {
             const user = this.get(userDb.id);
 
             // Проверяем находится ли игрок сейчас в игровой сессии
-            
+            if (user.status === "playing") {
+                
+            }
         } else {
             // Создаем объект User
             const user = new User(userDb);

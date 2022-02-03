@@ -8,12 +8,17 @@ import fs from 'fs';
 // Размер идентификатора сессии
 const sessionBytesLength = 16;
 
-// Размер токена идентификации игрока
-const tokenBytesLength = 24;
-
 // Чтение ключей для jwt RS256 sign
 const privateKey = fs.readFileSync(`${__dirname}/../../settings/jwtRS256.key`);
 const pubKey = fs.readFileSync(`${__dirname}/../../settings/jwtRS256.key.public`);
+
+// Настройка подписи JWT
+// Алгоритм хэширования RS256
+// Время жизни ключа - 1 день
+const JWT_OPTIONS_SIGN = {
+    algorithm: 'RS256',
+    expiresIn: '1d',
+};
 
 const jwtSign = promisify(jwt.sign);
 
@@ -85,7 +90,7 @@ export default class User {
      * @returns {String}
      */
     async generateToken() {
-        this._token = await jwtSign({id: this.id}, pubKey);
+        this._token = await jwtSign({id: this.id}, privateKey, JWT_OPTIONS_SIGN);
         return this._token;
     }
 

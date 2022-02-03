@@ -13,16 +13,19 @@ generator client {
 
 model User {
   @@map(name: "user")
-  id                Int       @default(autoincrement()) @id
-  email             String    @db.VarChar(320) @unique
-  username          String    @db.VarChar(100) @default("player")
-  password          Bytes     @db.Blob()
-  stamp_create      DateTime  @db.Timestamp() @default(now())
-  last_online       DateTime  @db.Timestamp() @default(now())
-  active            Boolean   @default(true)
+  id                Int         @default(autoincrement()) @id
+  email             String      @db.VarChar(320) @unique
+  username          String      @db.VarChar(100) @default("player")
+  password          Bytes       @db.Blob()
+  stamp_create      DateTime    @db.Timestamp() @default(now())
+  last_online       DateTime    @db.Timestamp() @default(now())
+  active            Boolean     @default(true)
+  status            UserStatus  @default(menu)
   platform          Platform
   skins             Skin[]
   sessions          Session[]
+  player_one        Match[]     @relation(name: "player_one")
+  player_two        Match[]     @relation(name: "player_two")
 }
 
 model Skin {
@@ -41,13 +44,23 @@ model Session {
   session_id        String    @db.VarChar(24)
   stamp_create      DateTime  @db.Timestamp() @default(now())
   user              User      @relation(fields: [user_id], references: [id])
+  session_one       Match[]   @relation(name: "session_one")
+  session_two       Match[]   @relation(name: "session_two")
 }
 
 model Match {
   @@map(name: "match")
-  id                Int       @default(autoincrement()) @id
-  stamp_create      DateTime  @db.Timestamp() @default(now())
-  status            Status
+  id                        Int       @default(autoincrement()) @id
+  stamp_create              DateTime  @db.Timestamp() @default(now())
+  player_one_id             Int
+  player_two_id             Int
+  player_one_session_id     Int
+  player_two_session_id     Int
+  player_one                User      @relation(name: "player_one", fields: [player_one_id], references: [id])
+  player_two                User      @relation(name: "player_two", fields: [player_two_id], references: [id])
+  session_one               Session   @relation(name: "session_one", fields: [player_one_session_id], references: [id])
+  session_two               Session   @relation(name: "session_two", fields: [player_two_session_id], references: [id])
+  status                    Status
 }
 
 enum Platform {
