@@ -1,4 +1,4 @@
-import { User } from "./User";
+import { User } from "../User";
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import colors from 'colors';

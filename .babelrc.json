@@ -1,6 +1,17 @@
 {
     "presets": ["@babel/preset-env"],
     "plugins": [
-        ["@babel/plugin-proposal-decorators", { "legacy": true }]
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        ["module-resolver", {
+            "root": ["./"],
+            "alias": {
+                "@modules": "./src/modules",
+                "@settings": "./settings",
+                "@services": "./src/services"
+            }
+        }]
+    ],
+    "ignore": [
+        "node_modules"
     ]
 }

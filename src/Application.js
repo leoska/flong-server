@@ -1,5 +1,5 @@
 import HttpServer from "./HttpServer";
-import Users from './Users';
+import Users from '@modules/Users';
 import Protocol from './Protocol';
 import Config from './Config';
 import { EventEmitter } from "events";
