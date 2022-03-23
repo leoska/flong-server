@@ -1,19 +1,11 @@
 import app from "./src/Application";
 import { timeout } from "./src/utils";
 import colors from 'colors';
+import { initLog } from "@modules/logger";
 
 // Время ожидания остановки процееса (в миллисекундах)
 const EXIT_MAX_WAIT = 10000; // 10 secs
 let APPLICATION_ALREADY_STOPPING = false;
-
-try {
-    (async () => {
-        await app.init();
-    })();
-} catch(e) {
-    console.error(`Application can't start corrent: ${e}`);
-    process.exit(1);
-}
 
 // Обработка остановки сервера
 process.on('SIGINT', async () => {
@@ -35,3 +27,14 @@ process.on('SIGINT', async () => {
 
     process.exit(0);
 });
+
+try {
+    initLog();
+
+    (async () => {
+        await app.init();
+    })();
+} catch(e) {
+    console.error(`Application can't start corrent: ${e}`);
+    process.exit(1);
+}

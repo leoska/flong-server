@@ -2,7 +2,6 @@ import HttpServer from "./HttpServer";
 import Users from '@modules/Users';
 import Protocol from './Protocol';
 import Config from './Config';
-import { EventEmitter } from "events";
 
 const DEFAULT_CONFIG_ENV = 'develop';
 const ARGV_CONFIG_ENV = process.argv[2] || '';
@@ -24,7 +23,6 @@ class Application {
     _terminating = false;
     _players = [];
     _gameRooms = [];
-    _bus = new EventEmitter();
 
     /**
      * Статический геттер на единственный экземпляр данного класса (сингл-тон)
@@ -35,17 +33,6 @@ class Application {
      */
     static get Instance() {
         return this._instance || (this._instance = new this());
-    }
-
-    /**
-     * Геттер на шину глобальных ивентов в приложении
-     * 
-     * @getter
-     * @this Application
-     * @returns {EventEmitter}
-     */
-    get bus() {
-        return this._bus;
     }
 
     /**
@@ -108,8 +95,6 @@ class Application {
      */
     async stop() {
         this._terminating = true;
-
-        this._bus.emit('application.stop');
 
         await Promise.all([
             this._httpServer.stop(),

@@ -4,7 +4,7 @@ import ErrorApiMethod from '../../ErrorApiMethod';
 
 // Поддерживаемые платформы
 const PLATFORMS = [
-    'html5',
+    'html5', // Самостоятельная платформа
 ];
 
 // Поддерживаемые версии билдов
