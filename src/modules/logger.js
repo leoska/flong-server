@@ -78,7 +78,7 @@ export default {
 
         try {
             _checkInit();
-            logFile.write(`${(new Date()).toISOString()} ${str}\n`);
+            errorFile.write(`${(new Date()).toISOString()} ${str}\n`);
         } catch(e) {
             console.error(colors.red(e.stack));
         } finally {
@@ -91,7 +91,7 @@ export default {
 
         try {
             _checkInit();
-            logFile.write(`${(new Date()).toISOString()} ${str}\n`);
+            errorFile.write(`${(new Date()).toISOString()} ${str}\n`);
         } catch(e) {
             console.error(colors.red(e.stack));
         } finally {

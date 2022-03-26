@@ -8,7 +8,9 @@
     "start": "set \"NODE_ENV=production\" && babel-node index.js",
     "watch": "set \"NODE_ENV=development\" && nodemon --exec babel-node index.js",
     "local-docker-up": "docker-compose up -d",
-    "local-docker-down": "docker-compose down"
+    "local-docker-down": "docker-compose down",
+    "prisma-migrate-dev": "npx prisma migrate dev --schema=./prisma/dev-migrate/schema.prisma --name init",
+    "prisma-migrate-deploy": "npx prisma migrate deploy --schema=./prisma/production/schema.prisma"
   },
   "repository": {
     "type": "git",

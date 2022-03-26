@@ -9,23 +9,6 @@ volumes:
     driver: local
 
 services:
-  flong_server:
-    image: flong_server:latest
-    stdin_open: true
-    tty: true
-    hostname: flong_server
-    restart: "no"
-    volumes:
-      - /etc/localtime:/etc/localtime
-      - ./src:/app/src:ro
-      - ./settings:/app/settings:ro
-      - ./index.js:/app/index.js:ro
-    networks:
-      - flong-network
-    logging:
-      options:
-        max-size: 50m
-
   mariadb:
     image: mariadb:10.7
     hostname: mariadb
@@ -43,3 +26,23 @@ services:
     logging:
       options:
         max-size: 50m
+
+  flong_server:
+    image: flong_server:latest
+    stdin_open: true
+    tty: true
+    hostname: flong_server
+    restart: "no"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ./src:/app/src:ro
+      - ./settings:/app/settings:ro
+      - ./index.js:/app/index.js:ro
+      - ./logs:/app/logs:rw
+    networks:
+      - flong-network
+    logging:
+      options:
+        max-size: 50m
+    depends_on:
+      - mariadb

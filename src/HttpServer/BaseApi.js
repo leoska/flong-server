@@ -1,4 +1,4 @@
-import { timeout } from '../utils';
+import { timeout } from '@modules/utils';
 import colors from 'colors';
 
 const API_TIMEOUT = 20000;

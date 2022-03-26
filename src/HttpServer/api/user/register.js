@@ -1,5 +1,5 @@
 import BaseApi       from '../../BaseApi';
-import { method }    from '../../../utils';
+import { method }    from '@modules/utils';
 import users         from '../../../Users';
 
 /**

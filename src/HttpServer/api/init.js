@@ -1,6 +1,6 @@
 import BaseApi       from '../BaseApi';
-import { method }    from '../../utils';
-import ErrorApiMethod from '../../ErrorApiMethod';
+import { method }    from '@modules/utils';
+import ErrorApiMethod from '@modules/ErrorApiMethod';
 
 // Поддерживаемые платформы
 const PLATFORMS = [

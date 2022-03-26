@@ -1,7 +1,7 @@
 import HttpServer from "./HttpServer";
 import Users from './Users';
 import Protocol from './Protocol';
-import Config from './Config';
+import config from '@modules/config';
 
 const DEFAULT_CONFIG_ENV = 'develop';
 const ARGV_CONFIG_ENV = process.argv[2] || '';
@@ -55,9 +55,7 @@ class Application {
      * @returns {Application}
      */
     constructor() {
-        Config.init(ARGV_CONFIG_ENV || DEFAULT_CONFIG_ENV);
-
-        const protocol = Config.get('protocol');
+        const protocol = config('protocol');
 
         if (!Protocol[protocol])
             throw new Error(`[Application] undefined protocol type! [${protocol}]. Available protocols: [${(Object.keys(Protocol) || []).join(', ')}]`);

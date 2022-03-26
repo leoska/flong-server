@@ -1,5 +1,5 @@
 import app from "./src/Application";
-import { timeout } from "./src/utils";
+import { timeout } from "@modules/utils";
 import colors from 'colors';
 import { initLog } from "@modules/logger";
 
