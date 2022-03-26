@@ -1,6 +1,6 @@
 import BaseApi       from '../../BaseApi';
 import { method }    from '../../../utils';
-import users         from '../../../modules/Users';
+import users         from '../../../Users';
 
 /**
  * Метод для регистрации пользователя

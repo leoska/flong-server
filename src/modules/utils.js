@@ -1,5 +1,5 @@
 import ErrorApiMethod from '@modules/ErrorApiMethod';
-import Users from '@modules/Users';
+import Users from '../Users';
 
 /**
  * Функция обработкик таймаута для API-методов

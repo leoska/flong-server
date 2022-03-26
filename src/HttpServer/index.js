@@ -2,9 +2,9 @@ import express               from 'express';
 import fsExtra               from 'fs-extra';
 import path                  from 'path';
 import http                  from 'http';
-import ErrorApiMethod        from '../ErrorApiMethod';
-import colors                from 'colors';
+import ErrorApiMethod        from '@modules/ErrorApiMethod';
 import Application           from '../Application';
+import logger                from '@modules/logger';
 
 const DEFAULT_HTTP_HOST = "0.0.0.0";
 const DEFAULT_HTTP_PORT = 25565;
@@ -59,7 +59,7 @@ export default class HttpServer {
 
         // Listen http-server
         this.server.listen(options, () => {
-            console.info(colors.blue("[HTTP-Server] Successfully initialized and started API http-server."));
+            logger.info("[HTTP-Server] Successfully initialized and started API http-server.");
         });
     }
 
@@ -73,7 +73,7 @@ export default class HttpServer {
      */
     async stop() {
         this.server.close(() => {
-            console.info(colors.blue("[HTTP-Server] Successfully stoped."));
+            logger.info("[HTTP-Server] Successfully stoped.");
         });
     }
 
@@ -146,7 +146,7 @@ export default class HttpServer {
                                 if (this._api[apiName])
                                     throw new Error(`[HTTP-Server] API ${apiName} is already initialized!`);
 
-                                console.log(colors.green(`[HTTP-Server] API ${apiModule.name} successfully initialized.`));
+                                logger.log(`[HTTP-Server] API ${apiModule.name} successfully initialized.`);
                                 this._api[apiName] = apiModule;
                             }
                         }
@@ -201,7 +201,7 @@ export default class HttpServer {
                 let response;
 
                 if (e instanceof ErrorApiMethod) {
-                    console.error(colors.red(`[HTTP-Server] ${e.stack || e.message}`));
+                    logger.error(`[HTTP-Server] ${e.stack || e.message}`);
                     
                     // Можно просто отправить статус
                     // res.sendStatus(e.status);
@@ -214,7 +214,7 @@ export default class HttpServer {
                     });
                 } else {
                     // Обработка INTERNAL_SERVER_ERROR (500)
-                    console.error(colors.red(`[HTTP-Server] Request API [${apiName}] failed.\n${e.stack}`));
+                    logger.error(`[HTTP-Server] Request API [${apiName}] failed.\n${e.stack}`);
 
                     res.status(500);
                     response = JSON.stringify({

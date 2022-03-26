@@ -1,26 +1,9 @@
 import crypto from "crypto";
 import UserData from "./UserData";
 import { PrismaClient } from '@prisma/client';
-import { promisify } from "util";
-import jwt from 'jsonwebtoken';
-import fs from 'fs';
 
 // Размер идентификатора сессии
 const sessionBytesLength = 16;
-
-// Чтение ключей для jwt RS256 sign
-const privateKey = fs.readFileSync(`${__dirname}/../../settings/jwtRS256.key`);
-const pubKey = fs.readFileSync(`${__dirname}/../../settings/jwtRS256.key.public`);
-
-// Настройка подписи JWT
-// Алгоритм хэширования RS256
-// Время жизни ключа - 1 день
-const JWT_OPTIONS_SIGN = {
-    algorithm: 'RS256',
-    expiresIn: '1d',
-};
-
-const jwtSign = promisify(jwt.sign);
 
 export default class User {
     _wsSocket = null; // Вебсокет
@@ -80,19 +63,7 @@ export default class User {
         return this._sessionId;
     }
 
-    /**
-     * Генерация bearer токена для авторизации
-     * sign with RSA SHA256
-     * 
-     * @async
-     * @public
-     * @this User
-     * @returns {String}
-     */
-    async generateToken() {
-        this._token = await jwtSign({id: this.id}, privateKey, JWT_OPTIONS_SIGN);
-        return this._token;
-    }
+
 
     /**
      * Сохранение юзера в базе данных

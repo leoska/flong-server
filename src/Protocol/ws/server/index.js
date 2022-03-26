@@ -1,6 +1,7 @@
 import ws from "ws";
 import colors from "colors";
 import WebSocketClient from "./../socket";
+import logger from "@modules/logger";
 
 const DEFAULT_WS_PORT = 25569;
 
@@ -35,7 +36,7 @@ export default class WebSocketServer {
 
         // Создание вебсокет сервера
         this._wsServer = new ws.Server(options, () => {
-            console.info(colors.blue("[WebSocket-Server] Successfully initialized and started WebSocketServer."));
+            logger.info("[WebSocket-Server] Successfully initialized and started WebSocketServer.");
         });
 
         // Новое подключение к серверу
@@ -44,7 +45,7 @@ export default class WebSocketServer {
             const ip = typeof(req.headers['x-forwarded-for']) === "string" ? req.headers['x-forwarded-for'].split(',')[0].trim() : req.connection.remoteAddress;
 
             // Логируем о попытке подключении к серверу
-            console.log(colors.green(`[WebSocket-Server] Connection from [${ip}] to url: [${req.url}]`));
+            logger.log(`[WebSocket-Server] Connection from [${ip}] to url: [${req.url}]`);
 
             const socket = new WebSocketClient(webSocket);
 
@@ -66,7 +67,7 @@ export default class WebSocketServer {
      */
     async stop() {
         this._wsServer.close(() => {
-            console.info(colors.blue("[WebSocket-Server] Successfully stoped."));
+            logger.info("[WebSocket-Server] Successfully stoped.");
         });
     }
 }

@@ -1,5 +1,5 @@
 import HttpServer from "./HttpServer";
-import Users from '@modules/Users';
+import Users from './Users';
 import Protocol from './Protocol';
 import Config from './Config';
 
@@ -81,8 +81,6 @@ class Application {
 
         // Initialize Game-Server
         await this._gameServer.init();
-
-
     }
 
     /**

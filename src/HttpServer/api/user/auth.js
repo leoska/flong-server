@@ -1,6 +1,6 @@
 import BaseApi       from '../../BaseApi';
 import { method }    from '@modules/utils';
-import users         from '@modules/Users';
+import users         from '../../../Users';
 
 /**
  * Метод для авторизации пользователя

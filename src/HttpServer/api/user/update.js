@@ -1,6 +1,6 @@
 import BaseApi       from '../../BaseApi';
 import { method }    from '@modules/utils';
-import users         from '@modules/Users';
+import users         from '../../../Users';
 
 @method("PUT")
 export default class UserUpdate extends BaseApi {
